@@ -1,13 +1,10 @@
 "use client";
 
 import HeroBadge from "./HeroBadge";
+import { motion } from "framer-motion";
 import { useMemo, useRef } from "react";
 import Image from "next/image";
 import ceoImage from "@/assets/CEO artics.jpg";
-import skillIcon from "@/assets/skill.svg";
-import performanceIcon from "@/assets/performance.svg";
-import passionateIcon from "@/assets/passionate.svg";
-import ethicIcon from "@/assets/ethic.svg";
 import BentoCard from "@/components/BentoCard";
 import StatCard from "@/components/StatCard";
 import VideoCard from "@/components/VideoCard";
@@ -18,10 +15,13 @@ export default function HomePage() {
         <div style={{ display: "flex", flexDirection: "column" }}>
             <HeroSection />
             <AboutSection />
+            <CoreValuesSection />
             <ClientMarqueeSection />
             <EnhanceBusinessSection />
             <StatsSection />
             <CampaignsInActionSection />
+            <BlogSection />
+            <ContactUsSection />
             <style jsx>{`
                 @keyframes marqueeLeft {
                     0% { transform: translateX(0); }
@@ -154,17 +154,41 @@ function HeroSection() {
                 <HeroBadge />
 
                 {/* Main Heading */}
-                <h1 className="hero-heading">
+                <motion.h1
+                    className="hero-heading"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8 }}
+                >
                     Think Big{" "}
-                    <span className="highlight">Dream</span>{" "}
+                    <motion.span
+                        className="highlight"
+                        style={{
+                            background: "linear-gradient(#1E65A7, #1E65A7) no-repeat left center",
+                        }}
+                        initial={{ backgroundSize: "0% 100%" }}
+                        animate={{ backgroundSize: "100% 100%" }}
+                        transition={{ duration: 0.8, delay: 0.6, ease: "easeInOut" }}
+                    >Dream</motion.span>{" "}
                     Wild
                     <br />
                     Never Stop{" "}
-                    <span className="highlight">Learning</span>
-                </h1>
+                    <motion.span
+                        className="highlight"
+                        style={{
+                            background: "linear-gradient(#1E65A7, #1E65A7) no-repeat left center",
+                        }}
+                        initial={{ backgroundSize: "0% 100%" }}
+                        animate={{ backgroundSize: "100% 100%" }}
+                        transition={{ duration: 0.8, delay: 0.8, ease: "easeInOut" }}
+                    >Learning</motion.span>
+                </motion.h1>
 
                 {/* Subtitle */}
-                <p
+                <motion.p
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.3 }}
                     style={{
                         fontFamily: "var(--font-inter)",
                         fontSize: "14px",
@@ -180,10 +204,13 @@ function HeroSection() {
                     We recently ran a national campaign on TikTok, reaching over 350
                     million views with 11,000 pieces of organic content in just three
                     months.
-                </p>
+                </motion.p>
 
                 {/* CTA Buttons */}
-                <div
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.6 }}
                     style={{
                         display: "flex",
                         alignItems: "center",
@@ -198,7 +225,7 @@ function HeroSection() {
                     <a href="#portfolio" className="btn-outline">
                         Our Portofolios
                     </a>
-                </div>
+                </motion.div>
             </div>
 
             {/* 3D Model placeholder areas — these will be replaced with actual 3D models later */}
@@ -265,7 +292,17 @@ function AboutSection() {
                 padding: "80px 0", // Padding top and bottom, but centered overall
             }}
         >
-            <div
+            <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+                variants={{
+                    hidden: { opacity: 0 },
+                    visible: {
+                        opacity: 1,
+                        transition: { staggerChildren: 0.2 }
+                    }
+                }}
                 style={{
                     display: "flex",
                     flexDirection: "row",
@@ -282,15 +319,20 @@ function AboutSection() {
                 <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
 
                     {/* About Badge */}
-                    <div style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        border: "1px solid rgba(255, 255, 255, 0.3)",
-                        borderRadius: "999px",
-                        padding: "4px 16px 4px 4px",
-                        gap: "12px",
-                        marginBottom: "24px" // Tighter gap to main text
-                    }}>
+                    <motion.div
+                        variants={{
+                            hidden: { opacity: 0, y: 20 },
+                            visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } }
+                        }}
+                        style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            border: "1px solid rgba(255, 255, 255, 0.3)",
+                            borderRadius: "999px",
+                            padding: "4px 16px 4px 4px",
+                            gap: "12px",
+                            marginBottom: "24px" // Tighter gap to main text
+                        }}>
                         <div style={{
                             background: "#1E65A7",
                             borderRadius: "999px",
@@ -310,43 +352,62 @@ function AboutSection() {
                         }}>
                             A brief introduction to who we are &gt;
                         </span>
-                    </div>
+                    </motion.div>
 
                     {/* Main Heading Text */}
-                    <h2 style={{
-                        fontFamily: "var(--font-inter)",
-                        fontWeight: 600, // SemiBold
-                        fontSize: "32px", // Dikecilkan sedikit agar lebih proporsional dengan layout full lebar
-                        lineHeight: 1.4, // Match Figma line breaks
-                        color: "#EEEEEE",
-                        letterSpacing: "-1.5px", // Adjusted Figma Spec for web rendering
-                        textAlign: "justify", // Rata kiri-kanan
-                        textJustify: "inter-word", // Mencegah spasi kosong terlalu renggang saat justified
-                    }}>
+                    <motion.h2
+                        variants={{
+                            hidden: { opacity: 0, y: 30, scale: 0.95 },
+                            visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } }
+                        }}
+                        style={{
+                            fontFamily: "var(--font-inter)",
+                            fontWeight: 600, // SemiBold
+                            fontSize: "32px", // Dikecilkan sedikit agar lebih proporsional dengan layout full lebar
+                            lineHeight: 1.4, // Match Figma line breaks
+                            color: "#EEEEEE",
+                            letterSpacing: "-1.5px", // Adjusted Figma Spec for web rendering
+                            textAlign: "justify", // Rata kiri-kanan
+                            textJustify: "inter-word", // Mencegah spasi kosong terlalu renggang saat justified
+                        }}>
                         ARTICS is a digital marketing agency specializing in product marketing and data-driven campaigns. The name “ARTICS,”{" "}
                         <span style={{ color: "#666666" }}>
                             short for “Archipelago Informatics,” reflects our mission to connect and elevate brands in the digital landscape.
                         </span>
-                    </h2>
+                    </motion.h2>
                 </div>
 
                 {/* Right Column: CEO Photo */}
-                <div style={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
+                <motion.div
+                    variants={{
+                        hidden: { opacity: 0, x: 50, scale: 0.9, filter: "blur(10px)" },
+                        visible: { opacity: 1, x: 0, scale: 1, filter: "blur(0px)", transition: { duration: 1, ease: [0.22, 1, 0.36, 1] } }
+                    }}
+                    style={{ flex: 1, display: "flex", justifyContent: "flex-end" }}
+                >
                     <div style={{
                         position: "relative",
                         width: "100%",
                         maxWidth: "500px", // Exact Figma dimension
-                        aspectRatio: "500 / 513" // Explicit 500x513 aspect ratio
+                        aspectRatio: "500 / 513", // Explicit 500x513 aspect ratio
+                        borderRadius: "24px",
+                        overflow: "hidden"
                     }}>
-                        <Image
-                            src={ceoImage}
-                            alt="CEO Artics"
-                            fill
-                            style={{ objectFit: "cover" }}
-                        />
+                        <motion.div
+                            whileHover={{ scale: 1.05 }}
+                            transition={{ duration: 0.4 }}
+                            style={{ width: "100%", height: "100%" }}
+                        >
+                            <Image
+                                src={ceoImage}
+                                alt="CEO Artics"
+                                fill
+                                style={{ objectFit: "cover" }}
+                            />
+                        </motion.div>
                     </div>
-                </div>
-            </div>
+                </motion.div>
+            </motion.div>
         </section>
     );
 }
@@ -363,18 +424,32 @@ function CoreValuesSection() {
                 justifyContent: "center",
             }}
         >
-            <div style={{
-                width: "100%",
-                maxWidth: "1380px", // Constrains the maximum width, slightly wider
-                display: "flex",
-                flexDirection: "column",
-                gap: "50px", // Reduced gap / "pagination" slightly
-                padding: "0 20px" // Adds some padding so it doesn't touch the edges completely on smaller screens
-            }}>
+            <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+                variants={{
+                    hidden: {},
+                    visible: { transition: { staggerChildren: 0.15 } }
+                }}
+                style={{
+                    width: "100%",
+                    maxWidth: "1380px", // Constrains the maximum width, slightly wider
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "50px", // Reduced gap / "pagination" slightly
+                    padding: "0 20px" // Adds some padding so it doesn't touch the edges completely on smaller screens
+                }}>
                 {/* Top Row: Title & Desc */}
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "40px" }}>
                     {/* Left Side */}
-                    <div style={{ flex: 1, minWidth: "300px" }}>
+                    <motion.div
+                        variants={{
+                            hidden: { opacity: 0, x: -40, filter: "blur(10px)" },
+                            visible: { opacity: 1, x: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } }
+                        }}
+                        style={{ flex: 1, minWidth: "300px" }}
+                    >
                         {/* Badge */}
                         <div style={{
                             display: "inline-flex",
@@ -418,10 +493,16 @@ function CoreValuesSection() {
                         }}>
                             ARTICS 3+1 Core<br />Values
                         </h2>
-                    </div>
+                    </motion.div>
 
                     {/* Right Side */}
-                    <div style={{ flex: 1, minWidth: "300px", display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "20px", maxWidth: "480px" }}>
+                    <motion.div
+                        variants={{
+                            hidden: { opacity: 0, x: 40, filter: "blur(10px)" },
+                            visible: { opacity: 1, x: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } }
+                        }}
+                        style={{ flex: 1, minWidth: "300px", display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "20px", maxWidth: "480px" }}
+                    >
                         <p style={{
                             fontFamily: "var(--font-inter)",
                             fontSize: "16px",
@@ -431,52 +512,65 @@ function CoreValuesSection() {
                         }}>
                             Our values define how we work, think, and deliver. They ensure that every campaign we execute is ethical, effective, and built for long-term success.
                         </p>
-                        <button style={{
-                            background: "#1E65A7",
-                            color: "white",
-                            border: "none",
-                            borderRadius: "999px",
-                            padding: "10px 24px",
-                            fontFamily: "var(--font-inter)",
-                            fontSize: "15px",
-                            fontWeight: 500,
-                            cursor: "pointer",
-                            transition: "background 0.2s"
-                        }}>
+                        <motion.button
+                            whileHover={{ scale: 1.05, backgroundColor: "#247acc" }}
+                            whileTap={{ scale: 0.95 }}
+                            style={{
+                                background: "#1E65A7",
+                                color: "white",
+                                border: "none",
+                                borderRadius: "999px",
+                                padding: "10px 24px",
+                                fontFamily: "var(--font-inter)",
+                                fontSize: "15px",
+                                fontWeight: 500,
+                                cursor: "pointer",
+                                transition: "background 0.2s"
+                            }}>
                             Contact Us
-                        </button>
-                    </div>
+                        </motion.button>
+                    </motion.div>
                 </div>
 
                 {/* Bottom Row: 4 Columns */}
-                <div style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(4, 1fr)",
-                    gap: "40px",
-                    marginTop: "20px"
-                }}>
-                    <ValueCard
-                        icon={ethicIcon}
-                        title="Ethic"
-                        description={<>Without ethics, skills and performance <strong style={{ color: "#EEEEEE", fontWeight: 600 }}>have no long-term value.</strong></>}
-                    />
-                    <ValueCard
-                        icon={performanceIcon}
-                        title="Performance"
-                        description={<>The background may be different, <strong style={{ color: "#EEEEEE", fontWeight: 600 }}>but the standard performance remains the same.</strong></>}
-                    />
-                    <ValueCard
-                        icon={skillIcon}
-                        title="Skill"
-                        description={<>The background may be different, <strong style={{ color: "#EEEEEE", fontWeight: 600 }}>but the standard performance remains the same.</strong></>}
-                    />
-                    <ValueCard
-                        icon={passionateIcon}
-                        title="Passionate"
-                        description={<>Passionate is not just enthusiasm at beginning, <strong style={{ color: "#EEEEEE", fontWeight: 600 }}>but a commitment to continue caring.</strong></>}
-                    />
+                <div
+                    style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(4, 1fr)",
+                        gap: "40px",
+                        marginTop: "20px"
+                    }}
+                >
+                    <motion.div variants={{ hidden: { opacity: 0, y: 40, scale: 0.9 }, visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 100, damping: 20 } } }}>
+                        <ValueCard
+                            icon="/ethic.svg"
+                            title="Ethic"
+                            description={<>Without ethics, skills and performance <strong style={{ color: "#EEEEEE", fontWeight: 600 }}>have no long-term value.</strong></>}
+                        />
+                    </motion.div>
+                    <motion.div variants={{ hidden: { opacity: 0, y: 40, scale: 0.9 }, visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 100, damping: 20 } } }}>
+                        <ValueCard
+                            icon="/performance.svg"
+                            title="Performance"
+                            description={<>The background may be different, <strong style={{ color: "#EEEEEE", fontWeight: 600 }}>but the standard performance remains the same.</strong></>}
+                        />
+                    </motion.div>
+                    <motion.div variants={{ hidden: { opacity: 0, y: 40, scale: 0.9 }, visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 100, damping: 20 } } }}>
+                        <ValueCard
+                            icon="/skill.svg"
+                            title="Skill"
+                            description={<>The background may be different, <strong style={{ color: "#EEEEEE", fontWeight: 600 }}>but the standard performance remains the same.</strong></>}
+                        />
+                    </motion.div>
+                    <motion.div variants={{ hidden: { opacity: 0, y: 40, scale: 0.9 }, visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 100, damping: 20 } } }}>
+                        <ValueCard
+                            icon="/passionate.svg"
+                            title="Passionate"
+                            description={<>Passionate is not just enthusiasm at beginning, <strong style={{ color: "#EEEEEE", fontWeight: 600 }}>but a commitment to continue caring.</strong></>}
+                        />
+                    </motion.div>
                 </div>
-            </div>
+            </motion.div>
         </section >
     );
 }
@@ -531,24 +625,38 @@ function ClientMarqueeSection() {
             }}
         >
             {/* Header Content */}
-            <div style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                textAlign: "center",
-                maxWidth: "800px",
-                padding: "0 20px"
-            }}>
-                {/* Badge */}
-                <div style={{
-                    display: "inline-flex",
+            <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+                variants={{
+                    hidden: { opacity: 0 },
+                    visible: { opacity: 1, transition: { staggerChildren: 0.15 } }
+                }}
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
                     alignItems: "center",
-                    border: "1px solid rgba(255, 255, 255, 0.3)",
-                    borderRadius: "999px",
-                    padding: "4px 16px 4px 4px",
-                    gap: "12px",
-                    marginBottom: "24px"
-                }}>
+                    textAlign: "center",
+                    maxWidth: "800px",
+                    padding: "0 20px"
+                }}
+            >
+                {/* Badge */}
+                <motion.div
+                    variants={{
+                        hidden: { opacity: 0, y: 20 },
+                        visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } }
+                    }}
+                    style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        border: "1px solid rgba(255, 255, 255, 0.3)",
+                        borderRadius: "999px",
+                        padding: "4px 16px 4px 4px",
+                        gap: "12px",
+                        marginBottom: "24px"
+                    }}>
                     <div style={{
                         background: "#1E65A7",
                         borderRadius: "999px",
@@ -568,40 +676,56 @@ function ClientMarqueeSection() {
                     }}>
                         Brands that trust our process &gt;
                     </span>
-                </div>
+                </motion.div>
 
                 {/* Title */}
-                <h2 style={{
-                    fontFamily: "var(--font-inter)",
-                    fontWeight: 700,
-                    fontSize: "48px",
-                    lineHeight: 1.2,
-                    color: "#EEEEEE",
-                    letterSpacing: "-1px",
-                    margin: "0 0 16px 0"
-                }}>
+                <motion.h2
+                    variants={{
+                        hidden: { opacity: 0, y: 30, scale: 0.95 },
+                        visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } }
+                    }}
+                    style={{
+                        fontFamily: "var(--font-inter)",
+                        fontWeight: 700,
+                        fontSize: "48px",
+                        lineHeight: 1.2,
+                        color: "#EEEEEE",
+                        letterSpacing: "-1px",
+                        margin: "0 0 16px 0"
+                    }}>
                     Who we've work with
-                </h2>
+                </motion.h2>
 
                 {/* Description Text */}
-                <p style={{
-                    fontFamily: "var(--font-inter)",
-                    fontSize: "16px",
-                    color: "#A0A0A0",
-                    lineHeight: 1.6,
-                    margin: 0,
-                    maxWidth: "600px"
-                }}>
+                <motion.p
+                    variants={{
+                        hidden: { opacity: 0, y: 20 },
+                        visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+                    }}
+                    style={{
+                        fontFamily: "var(--font-inter)",
+                        fontSize: "16px",
+                        color: "#A0A0A0",
+                        lineHeight: 1.6,
+                        margin: 0,
+                        maxWidth: "600px"
+                    }}>
                     We collaborate with brands from various industries, helping them scale their digital presence through tailored strategies, creative execution, and consistent performance.
-                </p>
-            </div>
+                </motion.p>
+            </motion.div>
 
             {/* Marquee Track Container */}
-            <div style={{
-                width: "100%",
-                marginTop: "40px",
-                position: "relative",
-            }}>
+            <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: 0.3 }}
+                style={{
+                    width: "100%",
+                    marginTop: "40px",
+                    position: "relative",
+                }}
+            >
                 {/* Fade masks on the edges */}
                 <div style={{
                     position: "absolute",
@@ -727,7 +851,7 @@ function ClientMarqueeSection() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </motion.div>
         </section>
     );
 }
@@ -744,18 +868,32 @@ function EnhanceBusinessSection() {
                 justifyContent: "center",
             }}
         >
-            <div style={{
-                width: "100%",
-                maxWidth: "1380px", // Match CoreValuesSection max-width
-                display: "flex",
-                flexDirection: "column",
-                gap: "60px",
-                padding: "0 20px"
-            }}>
+            <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+                variants={{
+                    hidden: {},
+                    visible: { transition: { staggerChildren: 0.1 } }
+                }}
+                style={{
+                    width: "100%",
+                    maxWidth: "1380px", // Match CoreValuesSection max-width
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "60px",
+                    padding: "0 20px"
+                }}>
                 {/* Header Row */}
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "40px" }}>
                     {/* Left Column (Badge & Title) */}
-                    <div style={{ flex: 1, minWidth: "300px" }}>
+                    <motion.div
+                        variants={{
+                            hidden: { opacity: 0, x: -50, filter: "blur(10px)" },
+                            visible: { opacity: 1, x: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } }
+                        }}
+                        style={{ flex: 1, minWidth: "300px" }}
+                    >
                         <div style={{
                             display: "inline-flex",
                             alignItems: "center",
@@ -796,10 +934,16 @@ function EnhanceBusinessSection() {
                         }}>
                             Enhance your<br />business
                         </h2>
-                    </div>
+                    </motion.div>
 
                     {/* Right Column (Desc & Button) */}
-                    <div style={{ flex: 1, minWidth: "300px", display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "24px" }}>
+                    <motion.div
+                        variants={{
+                            hidden: { opacity: 0, x: 50, filter: "blur(10px)" },
+                            visible: { opacity: 1, x: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } }
+                        }}
+                        style={{ flex: 1, minWidth: "300px", display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "24px" }}
+                    >
                         <p style={{
                             fontFamily: "var(--font-inter)",
                             fontSize: "16px",
@@ -811,58 +955,66 @@ function EnhanceBusinessSection() {
                         }}>
                             ARTICS helps businesses unlock their full digital potential. Through strategic planning, creative storytelling, we turn brand objectives into measurable outcomes.
                         </p>
-                        <button style={{
-                            background: "#1E65A7",
-                            color: "white",
-                            border: "none",
-                            borderRadius: "999px",
-                            padding: "12px 32px",
-                            fontFamily: "var(--font-inter)",
-                            fontSize: "15px",
-                            fontWeight: 500,
-                            cursor: "pointer",
-                            transition: "background 0.2s"
-                        }}>
+                        <motion.button
+                            whileHover={{ scale: 1.05, backgroundColor: "#247acc" }}
+                            whileTap={{ scale: 0.95 }}
+                            style={{
+                                background: "#1E65A7",
+                                color: "white",
+                                border: "none",
+                                borderRadius: "999px",
+                                padding: "12px 32px",
+                                fontFamily: "var(--font-inter)",
+                                fontSize: "15px",
+                                fontWeight: 500,
+                                cursor: "pointer",
+                                transition: "background 0.2s"
+                            }}>
                             Our Services
-                        </button>
-                    </div>
+                        </motion.button>
+                    </motion.div>
                 </div>
 
                 {/* Bento Grid layout */}
-                <div style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(7, 1fr)",
-                    gap: "24px",
-                    width: "100%"
-                }}>
+                <motion.div
+                    variants={{
+                        hidden: { opacity: 0, y: 50 },
+                        visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut", staggerChildren: 0.1 } }
+                    }}
+                    style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(7, 1fr)",
+                        gap: "24px",
+                        width: "100%"
+                    }}>
                     {/* Row 1 */}
-                    <div style={{ gridColumn: "span 4" }}>
+                    <motion.div variants={{ hidden: { opacity: 0, scale: 0.95 }, visible: { opacity: 1, scale: 1 } }} style={{ gridColumn: "span 4" }}>
                         <BentoCard title="Media Monitoring / Social Media Analyst" />
-                    </div>
-                    <div style={{ gridColumn: "span 3" }}>
+                    </motion.div>
+                    <motion.div variants={{ hidden: { opacity: 0, scale: 0.95 }, visible: { opacity: 1, scale: 1 } }} style={{ gridColumn: "span 3" }}>
                         <BentoCard title="Strategic Brand Plan" />
-                    </div>
+                    </motion.div>
 
                     {/* Row 2 */}
-                    <div style={{ gridColumn: "span 3" }}>
+                    <motion.div variants={{ hidden: { opacity: 0, scale: 0.95 }, visible: { opacity: 1, scale: 1 } }} style={{ gridColumn: "span 3" }}>
                         <BentoCard title="Social Media Management" />
-                    </div>
-                    <div style={{ gridColumn: "span 4" }}>
+                    </motion.div>
+                    <motion.div variants={{ hidden: { opacity: 0, scale: 0.95 }, visible: { opacity: 1, scale: 1 } }} style={{ gridColumn: "span 4" }}>
                         <BentoCard title="KOL Management" />
-                    </div>
+                    </motion.div>
 
                     {/* Row 3 */}
-                    <div style={{ gridColumn: "span 2" }}>
+                    <motion.div variants={{ hidden: { opacity: 0, scale: 0.95 }, visible: { opacity: 1, scale: 1 } }} style={{ gridColumn: "span 2" }}>
                         <BentoCard title="UGC Campaign" />
-                    </div>
-                    <div style={{ gridColumn: "span 2" }}>
+                    </motion.div>
+                    <motion.div variants={{ hidden: { opacity: 0, scale: 0.95 }, visible: { opacity: 1, scale: 1 } }} style={{ gridColumn: "span 2" }}>
                         <BentoCard title="KOC Campaign" />
-                    </div>
-                    <div style={{ gridColumn: "span 3" }}>
+                    </motion.div>
+                    <motion.div variants={{ hidden: { opacity: 0, scale: 0.95 }, visible: { opacity: 1, scale: 1 } }} style={{ gridColumn: "span 3" }}>
                         <BentoCard title="Creative Consultant" />
-                    </div>
-                </div>
-            </div>
+                    </motion.div>
+                </motion.div>
+            </motion.div>
         </section>
     );
 }
@@ -879,22 +1031,35 @@ function StatsSection() {
                 justifyContent: "center",
             }}
         >
-            <div style={{
-                width: "100%",
-                maxWidth: "1380px", // Match max-width
-                display: "flex",
-                flexDirection: "row",
-                gap: "80px",
-                padding: "0 20px",
-                alignItems: "center"
-            }}>
-                {/* Left Side: Stats Grid */}
-                <div style={{
-                    flex: 1.2,
-                    display: "grid",
-                    gridTemplateColumns: "repeat(2, 1fr)",
-                    gap: "24px"
+            <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+                variants={{
+                    hidden: {},
+                    visible: { transition: { staggerChildren: 0.2 } }
+                }}
+                style={{
+                    width: "100%",
+                    maxWidth: "1380px", // Match max-width
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: "80px",
+                    padding: "0 20px",
+                    alignItems: "center"
                 }}>
+                {/* Left Side: Stats Grid */}
+                <motion.div
+                    variants={{
+                        hidden: { opacity: 0, x: -50, filter: "blur(10px)" },
+                        visible: { opacity: 1, x: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
+                    }}
+                    style={{
+                        flex: 1.2,
+                        display: "grid",
+                        gridTemplateColumns: "repeat(2, 1fr)",
+                        gap: "24px"
+                    }}>
                     {/* Stat Box 1 */}
                     <StatCard
                         value={3}
@@ -930,11 +1095,16 @@ function StatsSection() {
                         title="Brands Client"
                         description={<>We work with more than 50<br />Clients</>}
                     />
-                </div>
+                </motion.div>
 
                 {/* Right Side: Copy Content */}
-                <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "flex-end", textAlign: "right" }}>
-
+                <motion.div
+                    variants={{
+                        hidden: { opacity: 0, x: 50, filter: "blur(10px)" },
+                        visible: { opacity: 1, x: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
+                    }}
+                    style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "flex-end", textAlign: "right" }}
+                >
                     {/* Badge */}
                     <div style={{
                         display: "inline-flex",
@@ -991,36 +1161,22 @@ function StatsSection() {
                     }}>
                         Our results speak for themselves. ARTICS has delivered billions of views, managed hundreds of projects, and partnered with dozens of brands to achieve sustainable digital growth.
                     </p>
-                </div>
+                </motion.div>
 
-            </div>
+            </motion.div>
         </section>
     );
 }
 
 function CampaignsInActionSection() {
 
-    // Top Row Videos
-    const campaignsRow1 = [
-        {
-            title: "Creative Campaign",
-            description: "Lorem ipsum dolor sit amet consectetur.",
-            videoUrl: "https://www.instagram.com/reels/DCBdAYty490/",
-        },
-        {
-            title: "Creative Campaign",
-            description: "Lorem ipsum dolor sit amet consectetur.",
-            videoUrl: "https://www.instagram.com/reel/DPjLUSQiepq/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA%3D%3D",
-        },
+    // Campaigns Videos
+    const campaigns = [
         {
             title: "Creative Campaign",
             description: "Lorem ipsum dolor sit amet consectetur.",
             videoUrl: "https://youtu.be/-Glr_7FFh6Y?si=lhOk6iev7uByU3ue",
         },
-    ];
-
-    // Bottom Row Videos
-    const campaignsRow2 = [
         {
             title: "Video Production",
             description: "Lorem ipsum dolor sit amet consectetur.",
@@ -1030,11 +1186,6 @@ function CampaignsInActionSection() {
             title: "Video Production",
             description: "Lorem ipsum dolor sit amet consectetur.",
             videoUrl: "https://youtu.be/yWKjrvqgLFw?si=h9aYr8ODhTnx0wYA",
-        },
-        {
-            title: "Video Production",
-            description: "Lorem ipsum dolor sit amet consectetur.",
-            videoUrl: "https://youtu.be/KwYdFybhoII?si=LJOqJ_57AMSrlKFi",
         },
     ];
 
@@ -1071,22 +1222,37 @@ function CampaignsInActionSection() {
             </div>
 
             {/* Header Area */}
-            <div style={{
-                width: "100%",
-                maxWidth: "1380px",
-                margin: "0 auto",
-                padding: "0 20px",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "flex-end", // Align to bottom to match buttons
-                gap: "40px",
-                position: "relative",
-                zIndex: 2,
-                marginBottom: "60px"
-            }}>
+            <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+                variants={{
+                    hidden: {},
+                    visible: { transition: { staggerChildren: 0.15 } }
+                }}
+                style={{
+                    width: "100%",
+                    maxWidth: "1380px",
+                    margin: "0 auto",
+                    padding: "0 20px",
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "flex-end", // Align to bottom to match buttons
+                    gap: "40px",
+                    position: "relative",
+                    zIndex: 1,
+                    marginBottom: "60px"
+                }}
+            >
                 {/* Left Side: Badge and Title */}
-                <div style={{ flex: 1, maxWidth: "600px" }}>
+                <motion.div
+                    variants={{
+                        hidden: { opacity: 0, x: -50, filter: "blur(10px)" },
+                        visible: { opacity: 1, x: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
+                    }}
+                    style={{ flex: 1, maxWidth: "600px" }}
+                >
                     <div style={{
                         display: "inline-flex",
                         alignItems: "center",
@@ -1130,10 +1296,16 @@ function CampaignsInActionSection() {
                     }}>
                         Our Campaigns in Action
                     </h2>
-                </div>
+                </motion.div>
 
                 {/* Right Side: Description and Navigation Buttons */}
-                <div style={{ flex: 1, maxWidth: "500px", display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "24px" }}>
+                <motion.div
+                    variants={{
+                        hidden: { opacity: 0, x: 50, filter: "blur(10px)" },
+                        visible: { opacity: 1, x: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
+                    }}
+                    style={{ flex: 1, maxWidth: "500px", display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "24px" }}
+                >
                     <p style={{
                         fontFamily: "var(--font-inter)",
                         fontSize: "16px",
@@ -1143,22 +1315,25 @@ function CampaignsInActionSection() {
                     }}>
                         From viral social media content to data-driven digital campaigns, these projects showcase how ARTICS turns ideas into high-performing brand experiences.
                     </p>
-                    <button style={{
-                        background: "#1E65A7",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "999px",
-                        padding: "12px 32px",
-                        fontFamily: "var(--font-inter)",
-                        fontSize: "15px",
-                        fontWeight: 500,
-                        cursor: "pointer",
-                        transition: "background 0.2s"
-                    }}>
+                    <motion.button
+                        whileHover={{ scale: 1.05, backgroundColor: "#247acc" }}
+                        whileTap={{ scale: 0.95 }}
+                        style={{
+                            background: "#1E65A7",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "999px",
+                            padding: "12px 32px",
+                            fontFamily: "var(--font-inter)",
+                            fontSize: "15px",
+                            fontWeight: 500,
+                            cursor: "pointer",
+                            transition: "background 0.2s"
+                        }}>
                         Our Portofolios
-                    </button>
-                </div>
-            </div>
+                    </motion.button>
+                </motion.div>
+            </motion.div>
 
             {/* Video Cards Grid */}
             <div style={{
@@ -1173,31 +1348,379 @@ function CampaignsInActionSection() {
                 gap: "32px",
             }}>
 
-                {/* Row 1 */}
-                <div style={{ display: "flex", gap: "24px", justifyContent: "center", flexWrap: "wrap", width: "100%" }}>
-                    {campaignsRow1.map((campaign, idx) => (
-                        <div key={`row1-${idx}`} style={{ flex: "1 1 320px", maxWidth: "420px" }}>
+                {/* Campaigns Row */}
+                <motion.div
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-100px" }}
+                    variants={{
+                        hidden: {},
+                        visible: { transition: { staggerChildren: 0.15, delayChildren: 0.2 } }
+                    }}
+                    style={{ display: "flex", gap: "24px", justifyContent: "center", flexWrap: "wrap", width: "100%" }}
+                >
+                    {campaigns.map((campaign, idx) => (
+                        <motion.div
+                            key={`campaign-${idx}`}
+                            variants={{
+                                hidden: { opacity: 0, y: 50, scale: 0.95 },
+                                visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 80, damping: 20 } }
+                            }}
+                            style={{ flex: "1 1 320px", maxWidth: "420px" }}
+                        >
                             <VideoCard
                                 title={campaign.title}
                                 description={campaign.description}
                                 videoUrl={campaign.videoUrl}
                             />
-                        </div>
+                        </motion.div>
                     ))}
-                </div>
+                </motion.div>
+            </div>
+        </section>
+    );
+}
 
-                {/* Row 2 */}
-                <div style={{ display: "flex", gap: "24px", justifyContent: "center", flexWrap: "wrap", width: "100%" }}>
-                    {campaignsRow2.map((campaign, idx) => (
-                        <div key={`row2-${idx}`} style={{ flex: "1 1 320px", maxWidth: "420px" }}>
-                            <VideoCard
-                                title={campaign.title}
-                                description={campaign.description}
-                                videoUrl={campaign.videoUrl}
-                            />
+function BlogSection() {
+    return (
+        <section
+            id="blog"
+            style={{
+                width: "100%",
+                backgroundColor: "#0C1124",
+                padding: "100px 0",
+                display: "flex",
+                justifyContent: "center",
+                position: "relative",
+                zIndex: 1
+            }}
+        >
+            <div style={{
+                width: "100%",
+                maxWidth: "1380px",
+                margin: "0 auto",
+                padding: "0 20px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "40px"
+            }}>
+                {/* Header Row */}
+                <motion.div
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-100px" }}
+                    variants={{
+                        hidden: {},
+                        visible: { transition: { staggerChildren: 0.15 } }
+                    }}
+                    style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "20px" }}
+                >
+                    <motion.div variants={{ hidden: { opacity: 0, x: -40 }, visible: { opacity: 1, x: 0, transition: { duration: 0.6 } } }}>
+                        {/* Badge */}
+                        <div style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            border: "1px solid rgba(255, 255, 255, 0.3)",
+                            borderRadius: "999px",
+                            padding: "4px 16px 4px 4px",
+                            gap: "12px",
+                            marginBottom: "24px"
+                        }}>
+                            <span style={{
+                                background: "#1E65A7",
+                                color: "white",
+                                padding: "6px 16px",
+                                borderRadius: "999px",
+                                fontFamily: "var(--font-inter)",
+                                fontSize: "12px",
+                                fontWeight: 600,
+                                letterSpacing: "0.5px"
+                            }}>
+                                OUR BLOG
+                            </span>
+                            <span style={{
+                                color: "#A0A0A0",
+                                fontFamily: "var(--font-inter)",
+                                fontSize: "14px",
+                                marginRight: "4px"
+                            }}>
+                                Stories behind our thinking and work &gt;
+                            </span>
                         </div>
-                    ))}
+                        {/* Title */}
+                        <h2 style={{
+                            fontFamily: "var(--font-inter)",
+                            fontWeight: 700,
+                            fontSize: "48px",
+                            lineHeight: 1.1,
+                            color: "#EEEEEE",
+                            letterSpacing: "-1px",
+                            margin: 0
+                        }}>
+                            Thoughts, stories, and digital learnings
+                        </h2>
+                    </motion.div>
+
+                    <motion.a
+                        variants={{ hidden: { opacity: 0, x: 40 }, visible: { opacity: 1, x: 0, transition: { duration: 0.6 } } }}
+                        href="#blog"
+                        className="btn-primary"
+                        style={{ padding: "12px 32px" }}
+                    >
+                        See More Blog
+                    </motion.a>
+                </motion.div>
+
+                {/* Grid */}
+                <div style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))",
+                    gap: "24px"
+                }}>
+                    {/* Card 1 */}
+                    <div style={{
+                        borderRadius: "24px",
+                        border: "1px solid rgba(255,255,255,0.1)",
+                        backgroundColor: "#000414",
+                        display: "flex",
+                        flexDirection: "column",
+                        transition: "all 0.3s ease",
+                        padding: "24px",
+                        gap: "24px"
+                    }}
+                        onMouseEnter={(e) => e.currentTarget.style.transform = "scale(0.98)"}
+                        onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
+                    >
+                        {/* Image Container */}
+                        <div style={{
+                            width: "100%",
+                            aspectRatio: "16/9",
+                            position: "relative",
+                            borderRadius: "16px",
+                            overflow: "hidden"
+                        }}>
+                            <Image src={ceoImage} alt="Blog Post" fill style={{ objectFit: "cover", objectPosition: "center top" }} />
+                        </div>
+
+                        {/* Text Content */}
+                        <div style={{ display: "flex", flexDirection: "column", gap: "16px", flex: 1 }}>
+                            <h3 style={{
+                                fontFamily: "var(--font-inter)",
+                                fontWeight: 700,
+                                fontSize: "28px",
+                                lineHeight: 1.2,
+                                color: "white",
+                                margin: 0,
+                                letterSpacing: "-0.5px"
+                            }}>Enigma Pulse (Socmed Listening & Analysis)</h3>
+                            <p style={{
+                                fontFamily: "var(--font-inter)",
+                                fontSize: "16px",
+                                color: "#A0A0A0",
+                                lineHeight: 1.6,
+                                margin: 0
+                            }}>
+                                ARTICS helps businesses unlock their full digital potential. planning, creative storytelling.....
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Card 2 */}
+                    <div style={{
+                        borderRadius: "24px",
+                        border: "1px solid rgba(255,255,255,0.1)",
+                        backgroundColor: "#000414",
+                        display: "flex",
+                        flexDirection: "column",
+                        transition: "all 0.3s ease",
+                        padding: "24px",
+                        gap: "24px"
+                    }}
+                        onMouseEnter={(e) => e.currentTarget.style.transform = "scale(0.98)"}
+                        onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
+                    >
+                        {/* Image Container */}
+                        <div style={{
+                            width: "100%",
+                            aspectRatio: "16/9",
+                            position: "relative",
+                            borderRadius: "16px",
+                            overflow: "hidden"
+                        }}>
+                            <Image src={ceoImage} alt="Blog Post" fill style={{ objectFit: "cover", objectPosition: "center top" }} />
+                        </div>
+
+                        {/* Text Content */}
+                        <div style={{ display: "flex", flexDirection: "column", gap: "16px", flex: 1 }}>
+                            <h3 style={{
+                                fontFamily: "var(--font-inter)",
+                                fontWeight: 700,
+                                fontSize: "28px",
+                                lineHeight: 1.2,
+                                color: "white",
+                                margin: 0,
+                                letterSpacing: "-0.5px"
+                            }}>Enigma Pulse (Socmed Listening & Analysis)</h3>
+                            <p style={{
+                                fontFamily: "var(--font-inter)",
+                                fontSize: "16px",
+                                color: "#A0A0A0",
+                                lineHeight: 1.6,
+                                margin: 0
+                            }}>
+                                ARTICS helps businesses unlock their full digital potential. planning, creative storytelling.....
+                            </p>
+                        </div>
+                    </div>
                 </div>
+            </div>
+        </section>
+    );
+}
+
+function ContactUsSection() {
+    return (
+        <section
+            id="contact"
+            style={{
+                width: "100%",
+                backgroundColor: "#0C1124",
+                padding: "60px 0 120px 0",
+                display: "flex",
+                justifyContent: "center",
+                position: "relative",
+                zIndex: 1
+            }}
+        >
+            <div style={{
+                width: "100%",
+                maxWidth: "1380px",
+                margin: "0 auto",
+                padding: "0 20px"
+            }}>
+                <motion.div
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-100px" }}
+                    variants={{
+                        hidden: { opacity: 0, y: 50, scale: 0.95 },
+                        visible: {
+                            opacity: 1,
+                            y: 0,
+                            scale: 1,
+                            transition: { type: "spring", stiffness: 60, damping: 20, staggerChildren: 0.1, delayChildren: 0.2 }
+                        }
+                    }}
+                    style={{
+                        width: "100%",
+                        borderRadius: "24px",
+                        border: "1px solid rgba(255,255,255,0.05)",
+                        background: "#000414",
+                        boxShadow: "0px 20px 60px rgba(0, 0, 0, 0.4), inset 0px 1px 0px rgba(255, 255, 255, 0.1)",
+                        padding: "100px 40px",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        textAlign: "center",
+                        position: "relative",
+                        overflow: "hidden"
+                    }}>
+                    {/* Inner highlight/glow to make it pop like the design */}
+                    <div style={{
+                        position: "absolute",
+                        top: 0,
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        width: "80%",
+                        height: "50%",
+                        background: "radial-gradient(ellipse at top, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 70%)",
+                        pointerEvents: "none"
+                    }} />
+
+                    {/* Badge */}
+                    <motion.div
+                        variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
+                        style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            border: "1px solid rgba(255, 255, 255, 0.3)",
+                            borderRadius: "999px",
+                            padding: "4px 16px 4px 4px",
+                            gap: "12px",
+                            marginBottom: "32px",
+                            position: "relative",
+                            zIndex: 2
+                        }}>
+                        <span style={{
+                            background: "#1E65A7",
+                            color: "white",
+                            padding: "6px 16px",
+                            borderRadius: "999px",
+                            fontFamily: "var(--font-inter)",
+                            fontSize: "12px",
+                            fontWeight: 600,
+                            letterSpacing: "0.5px"
+                        }}>
+                            TRUSTED BY
+                        </span>
+                        <span style={{
+                            color: "#A0A0A0",
+                            fontFamily: "var(--font-inter)",
+                            fontSize: "14px",
+                            marginRight: "8px"
+                        }}>
+                            Partnerships across multiple industries &gt;
+                        </span>
+                    </motion.div>
+
+                    <motion.h2
+                        variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
+                        style={{
+                            fontFamily: "var(--font-inter)",
+                            fontWeight: 700,
+                            fontSize: "56px",
+                            lineHeight: 1.1,
+                            color: "#EEEEEE",
+                            letterSpacing: "-1.5px",
+                            marginBottom: "24px",
+                            position: "relative",
+                            zIndex: 2
+                        }}>
+                        Trusted by Brands Across Industries
+                    </motion.h2>
+                    <motion.p
+                        variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
+                        style={{
+                            fontFamily: "var(--font-inter)",
+                            fontSize: "18px",
+                            color: "#A0A0A0",
+                            lineHeight: 1.6,
+                            maxWidth: "680px",
+                            marginBottom: "48px",
+                            position: "relative",
+                            zIndex: 2
+                        }}>
+                        From creative campaigns to data-driven execution, ARTICS partners with brands to
+                        achieve meaningful engagement and long-term digital growth.
+                    </motion.p>
+                    <motion.div
+                        variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
+                        style={{
+                            display: "flex",
+                            gap: "16px",
+                            flexWrap: "wrap",
+                            justifyContent: "center",
+                            position: "relative",
+                            zIndex: 2
+                        }}>
+                        <a href="mailto:hello@artics.id" className="btn-primary" style={{ padding: "14px 32px" }}>
+                            Contact Us
+                        </a>
+                        <a href="#portfolio" className="btn-outline" style={{ padding: "14px 32px" }}>
+                            Our Portofolios
+                        </a>
+                    </motion.div>
+                </motion.div>
             </div>
         </section>
     );

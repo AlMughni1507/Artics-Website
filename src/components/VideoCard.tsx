@@ -8,10 +8,11 @@ interface VideoCardProps {
     description: string;
     videoUrl: string; // the link to full video (youtube/drive)
     previewUrl?: string; // a short 5s clip or gif 
+    localVideoSrc?: string; // a local video file mapped directly from /public
     thumbnail?: StaticImageData | string;
 }
 
-export default function VideoCard({ title, description, videoUrl, previewUrl, thumbnail }: VideoCardProps) {
+export default function VideoCard({ title, description, videoUrl, previewUrl, localVideoSrc, thumbnail }: VideoCardProps) {
     const [isHovered, setIsHovered] = useState(false);
 
     // Helper to extract YouTube ID
@@ -72,7 +73,33 @@ export default function VideoCard({ title, description, videoUrl, previewUrl, th
                 zIndex: 0,
                 overflow: "hidden"
             }}>
-                {youtubeId ? (
+                {localVideoSrc ? (
+                    <video
+                        src={localVideoSrc}
+                        autoPlay
+                        muted
+                        playsInline
+                        onTimeUpdate={(e) => {
+                            // Force loop every 5 seconds as requested by user
+                            if (e.currentTarget.currentTime >= 5) {
+                                e.currentTarget.currentTime = 0;
+                                e.currentTarget.play();
+                            }
+                        }}
+                        style={{
+                            position: "absolute",
+                            top: "50%",
+                            left: "50%",
+                            minWidth: "100%",
+                            minHeight: "100%",
+                            width: "auto",
+                            height: "auto",
+                            transform: "translate(-50%, -50%) " + (isHovered ? "scale(1.05)" : "scale(1)"),
+                            objectFit: "cover",
+                            transition: "transform 0.5s ease"
+                        }}
+                    />
+                ) : youtubeId ? (
                     <iframe
                         src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${youtubeId}&modestbranding=1&showinfo=0`}
                         style={{
@@ -139,7 +166,6 @@ export default function VideoCard({ title, description, videoUrl, previewUrl, th
                             transition: "transform 0.5s ease"
                         }}
                         scrolling="no"
-                        allowTransparency={true}
                     />
                 ) : thumbnail ? (
                     <Image

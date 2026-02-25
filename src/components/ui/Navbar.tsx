@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 
 const navLinks = [
     { label: "Home", href: "#home", active: true },
@@ -21,8 +22,26 @@ export default function Navbar() {
         return () => window.removeEventListener("resize", check);
     }, []);
 
+    const { scrollY } = useScroll();
+    const [hidden, setHidden] = useState(false);
+
+    useMotionValueEvent(scrollY, "change", (latest) => {
+        const previous = scrollY.getPrevious() || 0;
+        if (latest > previous && latest > 100) {
+            setHidden(true); // Scrolling down and passed 100px
+        } else {
+            setHidden(false); // Scrolling up or near top
+        }
+    });
+
     return (
-        <nav
+        <motion.nav
+            variants={{
+                visible: { y: 0 },
+                hidden: { y: "-100%" },
+            }}
+            animate={hidden ? "hidden" : "visible"}
+            transition={{ duration: 0.35, ease: "easeInOut" }}
             style={{
                 position: "fixed",
                 top: 0,
@@ -252,6 +271,6 @@ export default function Navbar() {
                     </a>
                 </div>
             )}
-        </nav>
+        </motion.nav>
     );
 }
