@@ -1,19 +1,22 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const navLinks = [
-    { label: "Home", href: "#home", active: true },
-    { label: "About Us", href: "#about", active: false },
-    { label: "Services", href: "#services", active: false },
-    { label: "Gallery", href: "#gallery", active: false },
-    { label: "Blog", href: "#blog", active: false },
+    { label: "Home", href: "/", active: true },
+    { label: "About Us", href: "/pages/about", active: false },
+    { label: "Services", href: "/#services", active: false },
+    { label: "Gallery", href: "/pages/gallery", active: false },
+    { label: "Blog", href: "/#blog", active: false },
 ];
 
 export default function Navbar() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
+    const pathname = usePathname();
 
     useEffect(() => {
         const check = () => setIsMobile(window.innerWidth <= 768);
@@ -24,11 +27,23 @@ export default function Navbar() {
 
     const { scrollY } = useScroll();
     const [hidden, setHidden] = useState(false);
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     useMotionValueEvent(scrollY, "change", (latest) => {
         const previous = scrollY.getPrevious() || 0;
+
+        // Clear the existing timeout when user is actively scrolling
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
+
         if (latest > previous && latest > 100) {
             setHidden(true); // Scrolling down and passed 100px
+
+            // Set a timer to show the navbar again after scrolling stops
+            timeoutRef.current = setTimeout(() => {
+                setHidden(false);
+            }, 200); // 200ms delay after scroll stops for much faster response
         } else {
             setHidden(false); // Scrolling up or near top
         }
@@ -37,8 +52,8 @@ export default function Navbar() {
     return (
         <motion.nav
             variants={{
-                visible: { y: 0 },
-                hidden: { y: "-100%" },
+                visible: { y: 0, opacity: 1 },
+                hidden: { y: "-100%", opacity: 0 },
             }}
             animate={hidden ? "hidden" : "visible"}
             transition={{ duration: 0.35, ease: "easeInOut" }}
@@ -100,38 +115,41 @@ export default function Navbar() {
                 >
                     {/* Nav Links */}
                     <div style={{ display: "flex", alignItems: "center", gap: "32px" }}> {/* Adjusted from 40px */}
-                        {navLinks.map((link) => (
-                            <a
-                                key={link.label}
-                                href={link.href}
-                                style={{
-                                    fontFamily: "var(--font-inter)",
-                                    fontSize: "14px", // Adjusted from 16px
-                                    fontWeight: link.active ? 500 : 400,
-                                    color: link.active
-                                        ? "#FFFFFF"
-                                        : "rgba(255, 255, 255, 0.55)",
-                                    textDecoration: "none",
-                                    transition: "color 0.2s ease",
-                                    letterSpacing: "0.005em",
-                                }}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.color = "#FFFFFF";
-                                }}
-                                onMouseLeave={(e) => {
-                                    if (!link.active) {
-                                        e.currentTarget.style.color = "rgba(255, 255, 255, 0.55)";
-                                    }
-                                }}
-                            >
-                                {link.label}
-                            </a>
-                        ))}
+                        {navLinks.map((link) => {
+                            const isActive = link.href === pathname;
+                            return (
+                                <Link
+                                    key={link.label}
+                                    href={link.href}
+                                    style={{
+                                        fontFamily: "var(--font-inter)",
+                                        fontSize: "14px", // Adjusted from 16px
+                                        fontWeight: isActive ? 500 : 400,
+                                        color: isActive
+                                            ? "#FFFFFF"
+                                            : "rgba(255, 255, 255, 0.55)",
+                                        textDecoration: "none",
+                                        transition: "color 0.2s ease",
+                                        letterSpacing: "0.005em",
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.color = "#FFFFFF";
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        if (!isActive) {
+                                            e.currentTarget.style.color = "rgba(255, 255, 255, 0.55)";
+                                        }
+                                    }}
+                                >
+                                    {link.label}
+                                </Link>
+                            );
+                        })}
                     </div>
 
                     {/* Contact Us CTA */}
                     <a
-                        href="#contact"
+                        href="/#contact"
                         style={{
                             fontFamily: "var(--font-inter)",
                             fontSize: "14px", // Adjusted from 16px
@@ -231,25 +249,28 @@ export default function Navbar() {
                         borderBottom: "1px solid rgba(255, 255, 255, 0.04)",
                     }}
                 >
-                    {navLinks.map((link) => (
-                        <a
-                            key={link.label}
-                            href={link.href}
-                            onClick={() => setMobileMenuOpen(false)}
-                            style={{
-                                fontFamily: "var(--font-inter)",
-                                fontSize: "15px",
-                                fontWeight: 400,
-                                color: "rgba(255, 255, 255, 0.65)",
-                                textDecoration: "none",
-                            }}
-                        >
-                            {link.label}
-                        </a>
-                    ))}
+                    {navLinks.map((link) => {
+                        const isActive = link.href === pathname;
+                        return (
+                            <Link
+                                key={link.label}
+                                href={link.href}
+                                onClick={() => setMobileMenuOpen(false)}
+                                style={{
+                                    fontFamily: "var(--font-inter)",
+                                    fontSize: "15px",
+                                    fontWeight: isActive ? 500 : 400,
+                                    color: isActive ? "#FFFFFF" : "rgba(255, 255, 255, 0.65)",
+                                    textDecoration: "none",
+                                }}
+                            >
+                                {link.label}
+                            </Link>
+                        );
+                    })}
                     {/* Mobile Contact Us */}
                     <a
-                        href="#contact"
+                        href="/#contact"
                         onClick={() => setMobileMenuOpen(false)}
                         style={{
                             textAlign: "center",

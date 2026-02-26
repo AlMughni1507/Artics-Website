@@ -143,14 +143,22 @@ export default function Footer() {
                 </div>
 
                 {/* Bottom Section: Map Card */}
-                <div style={{
-                    position: "relative",
-                    width: "100%",
-                    height: "300px",
-                    borderRadius: "16px",
-                    overflow: "hidden",
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
-                }}>
+                <a
+                    href="https://maps.google.com/maps?q=Artics+Communication"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                        display: "block",
+                        position: "relative",
+                        width: "100%",
+                        height: "300px",
+                        borderRadius: "16px",
+                        overflow: "hidden",
+                        border: "1px solid rgba(255, 255, 255, 0.1)",
+                        cursor: "pointer",
+                        textDecoration: "none"
+                    }}
+                >
                     <iframe
                         src="https://maps.google.com/maps?q=Artics+Communication&t=&z=15&ie=UTF8&iwloc=&output=embed"
                         width="100%"
@@ -158,7 +166,7 @@ export default function Footer() {
                         style={{
                             border: 0,
                             filter: "grayscale(1) invert(0.9) contrast(1.2) opacity(0.6)",
-                            pointerEvents: "auto", // Allow interaction if desired, or "none" if it's just a background
+                            pointerEvents: "none", // Allow clicks to pass through to the anchor tag
                         }}
                         allowFullScreen={false}
                         loading="lazy"
@@ -179,6 +187,7 @@ export default function Footer() {
                         flexDirection: "column",
                         gap: "8px",
                         maxWidth: "340px",
+                        pointerEvents: "none", // Ensure clicks on the card also trigger the anchor
                     }}>
                         <h4 style={{ margin: 0, fontSize: "16px", fontWeight: 600, color: "#FFFFFF" }}>Artics Communication</h4>
                         <p style={{ margin: 0, fontSize: "13px", color: "#A0A0A0", lineHeight: 1.5 }}>
@@ -192,7 +201,7 @@ export default function Footer() {
                             <span style={{ fontSize: "13px", color: "#A0A0A0", marginLeft: "4px" }}>718.372 Penilaian</span>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
         </footer>
     );
