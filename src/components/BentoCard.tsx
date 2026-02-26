@@ -68,13 +68,11 @@ function BentoModel({ rotation, positionOffset, scaleMultiplier = 1 }: {
     useFrame((state) => {
         if (meshRef.current) {
             const t = state.clock.getElapsedTime();
-            // Gentle bobbing
-            meshRef.current.position.y = baseY + Math.sin(t * 1.2) * 0.1;
+            // Gentle bobbing only
+            meshRef.current.position.y = baseY + Math.sin(t * 0.8) * 0.05;
 
-            // Very slow continuous rotation to constantly show new shapes
-            meshRef.current.rotation.x = rotation[0] + Math.sin(t * 0.1) * 0.05;
-            meshRef.current.rotation.y = rotation[1] + t * 0.15;
-            meshRef.current.rotation.z = rotation[2] + Math.cos(t * 0.1) * 0.05;
+            // Fixed rotation based on props (no continuous spinning)
+            meshRef.current.rotation.set(rotation[0], rotation[1], rotation[2]);
         }
     });
 
@@ -141,13 +139,25 @@ export default function BentoCard({ title, width, flex, modelRotation, modelPosi
                 }}
             />
 
-            {/* 3D Model Background */}
+            {/* 3D Model Background (Bottom Right Corner) */}
             {modelRotation && (
-                <div style={{ position: "absolute", inset: 0, zIndex: 0, opacity: 0.8, pointerEvents: "none", overflow: "hidden" }}>
+                <div style={{
+                    position: "absolute",
+                    bottom: "0px",
+                    right: "0px",
+                    width: "180px",
+                    height: "180px",
+                    zIndex: 0,
+                    opacity: 0.5, // subtle watermark look
+                    pointerEvents: "none",
+                    // Fade out the edges of the 3D canvas so it blends perfectly with the card background
+                    maskImage: "radial-gradient(circle at bottom right, black 20%, transparent 80%)",
+                    WebkitMaskImage: "radial-gradient(circle at bottom right, black 20%, transparent 80%)",
+                }}>
                     <Canvas
                         camera={{ position: [0, 0, 8], fov: 45 }}
-                        dpr={[1, 1]} // Capped at 1 for performance across 7 canvases
-                        gl={{ alpha: true, antialias: false, powerPreference: "high-performance" }} // no antialias for performance
+                        dpr={[1, 1.5]} // slightly higher DPR for quality
+                        gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }} // must be true or it looks very jagged
                         style={{ background: "transparent" }}
                     >
                         <Suspense fallback={null}>
@@ -158,8 +168,9 @@ export default function BentoCard({ title, width, flex, modelRotation, modelPosi
 
                             <BentoModel
                                 rotation={modelRotation}
-                                positionOffset={modelPosition || [2, -1, 0]}
-                                scaleMultiplier={modelScale || 1}
+                                // Default corner offset if not provided
+                                positionOffset={modelPosition || [0, 0, 0]}
+                                scaleMultiplier={modelScale || 1.2}
                             />
                             <Environment preset="city" resolution={128} />
                         </Suspense>

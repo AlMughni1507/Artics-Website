@@ -978,16 +978,16 @@ function EnhanceBusinessSection() {
                         <BentoCard
                             title="Media Monitoring / Social Media Analyst"
                             modelRotation={[0.5, 1.2, 0.2]}
-                            modelPosition={[2, -0.5, 0]}
-                            modelScale={1.2}
+                            modelPosition={[0, -0.2, 0]}
+                            modelScale={1.5}
                         />
                     </motion.div>
                     <motion.div variants={{ hidden: { opacity: 0, scale: 0.95 }, visible: { opacity: 1, scale: 1 } }} style={{ gridColumn: "span 3" }}>
                         <BentoCard
                             title="Strategic Brand Plan"
                             modelRotation={[-0.4, 2.5, 0.1]}
-                            modelPosition={[1.5, 0, 0]}
-                            modelScale={1.0}
+                            modelPosition={[0, 0, 0]}
+                            modelScale={1.5}
                         />
                     </motion.div>
 
@@ -996,16 +996,16 @@ function EnhanceBusinessSection() {
                         <BentoCard
                             title="Social Media Management"
                             modelRotation={[0.8, -1.0, 0.5]}
-                            modelPosition={[1.5, -0.5, 0]}
-                            modelScale={1.1}
+                            modelPosition={[0, -0.1, 0]}
+                            modelScale={1.6}
                         />
                     </motion.div>
                     <motion.div variants={{ hidden: { opacity: 0, scale: 0.95 }, visible: { opacity: 1, scale: 1 } }} style={{ gridColumn: "span 4" }}>
                         <BentoCard
                             title="KOL Management"
                             modelRotation={[-0.2, 4.0, -0.3]}
-                            modelPosition={[2, -1, 0]}
-                            modelScale={1.3}
+                            modelPosition={[0, -0.3, 0]}
+                            modelScale={1.7}
                         />
                     </motion.div>
 
@@ -1014,24 +1014,24 @@ function EnhanceBusinessSection() {
                         <BentoCard
                             title="UGC Campaign"
                             modelRotation={[0.1, 0.8, 0.8]}
-                            modelPosition={[1, 0, 0]}
-                            modelScale={1.0}
+                            modelPosition={[0, -0.1, 0]}
+                            modelScale={1.4}
                         />
                     </motion.div>
                     <motion.div variants={{ hidden: { opacity: 0, scale: 0.95 }, visible: { opacity: 1, scale: 1 } }} style={{ gridColumn: "span 2" }}>
                         <BentoCard
                             title="KOC Campaign"
                             modelRotation={[1.2, 3.1, -0.2]}
-                            modelPosition={[1, -0.5, 0]}
-                            modelScale={1.0}
+                            modelPosition={[0, 0, 0]}
+                            modelScale={1.5}
                         />
                     </motion.div>
                     <motion.div variants={{ hidden: { opacity: 0, scale: 0.95 }, visible: { opacity: 1, scale: 1 } }} style={{ gridColumn: "span 3" }}>
                         <BentoCard
                             title="Creative Consultant"
                             modelRotation={[-0.8, -2.1, 0.4]}
-                            modelPosition={[1.8, -0.5, 0]}
-                            modelScale={1.2}
+                            modelPosition={[0, -0.1, 0]}
+                            modelScale={1.6}
                         />
                     </motion.div>
                 </motion.div>
