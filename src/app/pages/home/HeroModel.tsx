@@ -80,31 +80,19 @@ function Model({ url, rotation, positionOffset, scaleMultiplier = 1 }: {
             // Side-to-side sway (X-axis) - very subtle
             const swayX = Math.cos(cycle) * 0.1;
 
-            // Vertical bobbing (Y-axis) - gentle bounce
-            const bobY = Math.abs(Math.sin(cycle)) * 0.1;
+            // Vertical bobbing (Y-axis) - gentle bounce (using cos for smoothness instead of abs)
+            // Happens twice per full cycle (once for each "footstep")
+            const bobY = (Math.cos(cycle * 2) * -0.5 + 0.5) * 0.1;
 
             // Slight tilting to sell the weight shift - extremely subtle
             const tiltZ = Math.cos(cycle) * 0.02;
             const tiltX = Math.sin(cycle * 2) * 0.01;
 
-            // Apply positions with smooth lerping (no mouse parallax)
-            meshRef.current.position.x = THREE.MathUtils.lerp(
-                meshRef.current.position.x,
-                positionOffset[0] + swayX,
-                0.1
-            );
-
-            meshRef.current.position.y = THREE.MathUtils.lerp(
-                meshRef.current.position.y,
-                baseY + bobY,
-                0.1
-            );
-
-            meshRef.current.position.z = THREE.MathUtils.lerp(
-                meshRef.current.position.z,
-                strideZ,
-                0.1
-            );
+            // Apply positions directly (no lerp) for perfect mathematically smooth movement
+            // Lerping was only needed when we had unpredictable mouse input
+            meshRef.current.position.x = positionOffset[0] + swayX;
+            meshRef.current.position.y = baseY + bobY;
+            meshRef.current.position.z = strideZ;
 
             // Apply base rotation + dynamic walking tilts
             meshRef.current.rotation.set(
@@ -137,19 +125,19 @@ export default function HeroModels() {
         >
             <Canvas
                 camera={{ position: [0, 0, 8], fov: 45 }}
-                dpr={[1, 1.5]} // Capped at 1.5 for performance on high-DPI
-
+                dpr={1} // Cap at 1 for performance
+                performance={{ min: 0.5 }}
                 gl={{
                     alpha: true,
                     antialias: true,
                     stencil: false,
+                    depth: true,
                     powerPreference: "high-performance",
                     toneMapping: THREE.ACESFilmicToneMapping,
-                    toneMappingExposure: 1.0, // Brighter for more vibrant colors
+                    toneMappingExposure: 1.0,
                 }}
                 style={{ background: "transparent" }}
                 frameloop="always"
-                performance={{ min: 0.5 }}
             >
                 <Suspense fallback={null}>
                     {/* Darker, moodier lighting matching the theme */}

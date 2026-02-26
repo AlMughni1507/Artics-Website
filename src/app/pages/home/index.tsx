@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { useMemo, useRef } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import ceoImage from "@/assets/CEO artics.jpg";
+import ceoImage from "@/assets/ceo artics (1).jpeg";
 
 // Lazy-load 3D models for better initial page load
 const HeroModels = dynamic(() => import("./HeroModel"), { ssr: false });
@@ -374,8 +374,8 @@ function AboutSection() {
                     <div style={{
                         position: "relative",
                         width: "100%",
-                        maxWidth: "500px", // Exact Figma dimension
-                        aspectRatio: "500 / 513", // Explicit 500x513 aspect ratio
+                        maxWidth: "500px",
+                        aspectRatio: "500 / 513",
                         borderRadius: "24px",
                         overflow: "hidden"
                     }}>

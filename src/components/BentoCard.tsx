@@ -156,15 +156,15 @@ export default function BentoCard({ title, width, flex, modelRotation, modelPosi
                 }}>
                     <Canvas
                         camera={{ position: [0, 0, 8], fov: 45 }}
-                        dpr={[1, 1.5]} // slightly higher DPR for quality
-                        gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }} // must be true or it looks very jagged
+                        dpr={1} // Strict cap at 1 for multi-canvas performance
+                        performance={{ min: 0.5 }}
+                        gl={{ alpha: true, antialias: true, powerPreference: "high-performance", stencil: false, depth: true }}
                         style={{ background: "transparent" }}
                     >
                         <Suspense fallback={null}>
-                            <ambientLight intensity={0.1} />
-                            <spotLight position={[10, 5, 10]} angle={0.4} penumbra={1} intensity={6} color="#1E65A7" />
-                            <pointLight position={[-8, 12, 5]} intensity={4} color="#0C1124" />
-                            <pointLight position={[15, -10, -5]} intensity={2} color="#001D4A" />
+                            <ambientLight intensity={0.2} />
+                            <pointLight position={[10, 10, 10]} intensity={3} color="#1E65A7" />
+                            <Environment preset="city" resolution={32} />
 
                             <BentoModel
                                 rotation={modelRotation}
@@ -172,7 +172,6 @@ export default function BentoCard({ title, width, flex, modelRotation, modelPosi
                                 positionOffset={modelPosition || [0, 0, 0]}
                                 scaleMultiplier={modelScale || 1.2}
                             />
-                            <Environment preset="city" resolution={128} />
                         </Suspense>
                     </Canvas>
                 </div>
