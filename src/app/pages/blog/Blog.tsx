@@ -71,7 +71,7 @@ function BlogHeroSection() {
             <div className="spotlight-overlay" />
             <div className="spotlight-ray" />
 
-            {/* Decorative SVGs scattered around */}
+            {/* Standard 4 Decorative SVGs scattered around */}
             <motion.div
                 initial={{ opacity: 0, scale: 0.8, x: -50 }}
                 animate={{ opacity: 0.3, scale: 1, x: 0 }}
@@ -99,6 +99,36 @@ function BlogHeroSection() {
                     style={{ width: "100%", height: "100%", position: "relative" }}
                 >
                     <Image src="/performance.svg" alt="Performance" fill style={{ objectFit: "contain" }} priority />
+                </motion.div>
+            </motion.div>
+
+            <motion.div
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 0.2, y: 0 }}
+                transition={{ duration: 1.5, ease: "easeOut", delay: 0.4 }}
+                style={{ position: "absolute", top: "10%", left: "15%", zIndex: 2, width: "150px", height: "150px" }}
+            >
+                <motion.div
+                    animate={{ y: [-15, 15] }}
+                    transition={{ duration: 4.5, repeat: Infinity, repeatType: "reverse", ease: "easeInOut", delay: 1 }}
+                    style={{ width: "100%", height: "100%", position: "relative" }}
+                >
+                    <Image src="/passionate.svg" alt="Passionate" fill style={{ objectFit: "contain" }} priority />
+                </motion.div>
+            </motion.div>
+
+            <motion.div
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 0.2, y: 0 }}
+                transition={{ duration: 1.5, ease: "easeOut", delay: 0.6 }}
+                style={{ position: "absolute", top: "5%", right: "10%", zIndex: 2, width: "200px", height: "200px" }}
+            >
+                <motion.div
+                    animate={{ y: [-12, 12] }}
+                    transition={{ duration: 3.5, repeat: Infinity, repeatType: "reverse", ease: "easeInOut", delay: 0.2 }}
+                    style={{ width: "100%", height: "100%", position: "relative" }}
+                >
+                    <Image src="/skill.svg" alt="Skill" fill style={{ objectFit: "contain" }} priority />
                 </motion.div>
             </motion.div>
 
