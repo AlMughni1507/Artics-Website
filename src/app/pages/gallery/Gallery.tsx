@@ -1,15 +1,166 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Pagination from "@/components/ui/Pagination";
 
 export default function GalleryPage() {
     return (
         <div style={{ display: "flex", flexDirection: "column", backgroundColor: "#0C1124", minHeight: "100vh" }}>
             <GalleryHeroSection />
-            {/* Future gallery content will go here */}
+            <GalleryBody />
         </div>
+    );
+}
+
+function GalleryBody() {
+    const [currentPage, setCurrentPage] = useState(1);
+    const totalPages = 25; // Matching the reference image
+    return (
+        <section style={{
+            padding: "80px 5% 120px 5%",
+            backgroundColor: "#0C1124",
+            position: "relative",
+            zIndex: 4
+        }}>
+            <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+                {/* Header section matching the "OUR BLOG" design in the image */}
+                <div style={{ marginBottom: "64px" }}>
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6 }}
+                        style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            padding: "4px 20px 4px 4px",
+                            borderRadius: "100px",
+                            border: "1px solid rgba(255, 255, 255, 0.4)",
+                            backgroundColor: "transparent",
+                            gap: "12px",
+                            marginBottom: "28px",
+                            cursor: "pointer",
+                        }}
+                    >
+                        <span style={{
+                            fontSize: "13px",
+                            fontWeight: 600,
+                            color: "#FFFFFF",
+                            backgroundColor: "#1D61AB",
+                            padding: "8px 18px",
+                            borderRadius: "100px",
+                            letterSpacing: "0.02em"
+                        }}>OUR BLOG</span>
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                            <span style={{ fontSize: "14px", color: "#BBBBBB", fontWeight: 400 }}>Stories behind our thinking and work</span>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#BBBBBB" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="m9 18 6-6-6-6" />
+                            </svg>
+                        </div>
+                    </motion.div>
+
+                    <motion.h2
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.1 }}
+                        style={{
+                            fontSize: "clamp(32px, 5vw, 56px)",
+                            fontWeight: 600,
+                            letterSpacing: "-0.03em",
+                            margin: 0,
+                            color: "#F8FAFC",
+                            lineHeight: 1.1
+                        }}
+                    >
+                        Thoughts, stories, and digital learnings
+                    </motion.h2>
+                </div>
+
+                {/* Grid section with staggered masonry-like layout */}
+                <div style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(3, 1fr)",
+                    gridAutoRows: "minmax(280px, auto)",
+                    gap: "24px",
+                    marginBottom: "64px"
+                }}>
+                    {/* Pattern Unit 1 */}
+                    <GalleryFrame /> {/* 1x1 */}
+                    <GalleryFrame /> {/* 1x1 */}
+                    <GalleryFrame style={{ gridRow: "span 2" }} /> {/* Tall 1x2 */}
+                    <GalleryFrame style={{ gridColumn: "span 2" }} /> {/* Wide 2x1 */}
+
+                    {/* Pattern Unit 2 (Staggered) */}
+                    <GalleryFrame style={{ gridRow: "span 2" }} /> {/* Tall 1x2 */}
+                    <GalleryFrame /> {/* 1x1 */}
+                    <GalleryFrame /> {/* 1x1 */}
+                    <GalleryFrame style={{ gridColumn: "span 2" }} /> {/* Wide 2x1 */}
+
+                    {/* Pattern Unit 3 (Returning to initial pattern) */}
+                    <GalleryFrame /> {/* 1x1 */}
+                    <GalleryFrame /> {/* 1x1 */}
+                    <GalleryFrame style={{ gridRow: "span 2" }} /> {/* Tall 1x2 */}
+                    <GalleryFrame style={{ gridColumn: "span 2" }} /> {/* Wide 2x1 */}
+                </div>
+
+                {/* Pagination centered at the bottom */}
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                    />
+                </div>
+            </div>
+        </section>
+    );
+}
+
+function GalleryFrame({ style }: { style?: React.CSSProperties }) {
+    return (
+        <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            whileHover={{ y: -8, transition: { duration: 0.3 } }}
+            style={{
+                backgroundColor: "#1E293B",
+                borderRadius: "20px",
+                overflow: "hidden",
+                position: "relative",
+                aspectRatio: style?.gridRow ? "unset" : style?.gridColumn ? "2 / 1.1" : "1 / 1.1",
+                boxShadow: "0 10px 30px -10px rgba(0, 0, 0, 0.5)",
+                border: "1px solid rgba(255, 255, 255, 0.03)",
+                ...style
+            }}
+        >
+            {/* Placeholder overlay to match the "photo look" even without images */}
+            <div style={{
+                width: "100%",
+                height: "100%",
+                background: "linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 100%)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+            }}>
+                <div style={{ opacity: 0.1 }}>
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                        <rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><circle cx="9" cy="9" r="2" /><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+                    </svg>
+                </div>
+            </div>
+
+            {/* Subtle inner shadow for depth */}
+            <div style={{
+                position: "absolute",
+                inset: 0,
+                boxShadow: "inset 0 0 40px rgba(0, 0, 0, 0.2)",
+                pointerEvents: "none"
+            }} />
+        </motion.div>
     );
 }
 

@@ -1,12 +1,31 @@
 "use client";
 
-import { useRef, Suspense, useMemo, useEffect } from "react";
+import { useRef, Suspense, useMemo, useEffect, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useGLTF, Environment } from "@react-three/drei";
 import * as THREE from "three";
+import { motion } from "framer-motion";
 
 // Preload the model
 useGLTF.preload("/models/textured_model.glb");
+
+// Shared material to avoid re-creation
+function useOptimizedMaterial() {
+    return useMemo(() => new THREE.MeshPhysicalMaterial({
+        color: new THREE.Color("#070B19"), // Dark navy matching theme
+        metalness: 0.9,
+        roughness: 0.1,
+        ior: 1.5,
+        clearcoat: 0.8,
+        clearcoatRoughness: 0.1,
+        iridescence: 0.8,
+        iridescenceIOR: 1.5,
+        iridescenceThicknessRange: [100, 400],
+        emissive: new THREE.Color("#070B19"),
+        emissiveIntensity: 0.1,
+        envMapIntensity: 1.0,
+    }), []);
+}
 
 function Model({ url, rotation, positionOffset, scaleMultiplier = 1 }: {
     url: string;
@@ -17,6 +36,7 @@ function Model({ url, rotation, positionOffset, scaleMultiplier = 1 }: {
     const { scene } = useGLTF(url);
     const clonedScene = useMemo(() => scene.clone(true), [scene]);
     const meshRef = useRef<THREE.Group>(null);
+    const material = useOptimizedMaterial();
     const baseY = positionOffset[1];
 
     // Auto-scale + center
@@ -34,67 +54,37 @@ function Model({ url, rotation, positionOffset, scaleMultiplier = 1 }: {
 
     const finalScale = normalizedScale * scaleMultiplier;
 
-    // Boost material for glossy iridescent look
+    // Apply shared material
     useEffect(() => {
         clonedScene.traverse((child: any) => {
-            if (child.isMesh && child.material) {
-                // Ensure we are using MeshPhysicalMaterial for advanced properties
+            if (child.isMesh) {
                 const oldMat = child.material;
-                const newMat = new THREE.MeshPhysicalMaterial({
-                    color: new THREE.Color("#070B19"), // Dark navy matching theme
-                    metalness: 0.9,
-                    roughness: 0.1, // Slightly rougher to diffuse reflections
-                    ior: 1.5,
-                    clearcoat: 0.8,
-                    clearcoatRoughness: 0.1,
-                    iridescence: 0.8, // Reduced iridescence
-                    iridescenceIOR: 1.5,
-                    iridescenceThicknessRange: [100, 400],
-                    emissive: new THREE.Color("#070B19"), // Theme dark blue
-                    emissiveIntensity: 0.1, // Much darker
-                    envMapIntensity: 1.0, // Reduced reflections
-                });
-
-                // Transfer map if exists
-                if (oldMat.map) newMat.map = oldMat.map;
-                if (oldMat.normalMap) newMat.normalMap = oldMat.normalMap;
-
-                child.material = newMat;
-                child.material.needsUpdate = true;
+                // Reuse the optimized material but keep the maps if they exist
+                const meshMat = material.clone();
+                if (oldMat.map) meshMat.map = oldMat.map;
+                if (oldMat.normalMap) meshMat.normalMap = oldMat.normalMap;
+                child.material = meshMat;
             }
         });
-    }, [clonedScene]);
+    }, [clonedScene, material]);
 
     useFrame((state) => {
         if (meshRef.current) {
             const t = state.clock.getElapsedTime();
-
-            // 1. "Walking" cycle simulation (SOFTENED)
-            // We use a specific frequency for the walk cycle (slightly slower now)
             const walkSpeed = 0.8;
             const cycle = t * walkSpeed;
 
-            // Forward/backward stride (Z-axis) - very subtle
             const strideZ = Math.sin(cycle) * 0.15;
-
-            // Side-to-side sway (X-axis) - very subtle
             const swayX = Math.cos(cycle) * 0.1;
-
-            // Vertical bobbing (Y-axis) - gentle bounce (using cos for smoothness instead of abs)
-            // Happens twice per full cycle (once for each "footstep")
             const bobY = (Math.cos(cycle * 2) * -0.5 + 0.5) * 0.1;
 
-            // Slight tilting to sell the weight shift - extremely subtle
             const tiltZ = Math.cos(cycle) * 0.02;
             const tiltX = Math.sin(cycle * 2) * 0.01;
 
-            // Apply positions directly (no lerp) for perfect mathematically smooth movement
-            // Lerping was only needed when we had unpredictable mouse input
             meshRef.current.position.x = positionOffset[0] + swayX;
             meshRef.current.position.y = baseY + bobY;
             meshRef.current.position.z = strideZ;
 
-            // Apply base rotation + dynamic walking tilts
             meshRef.current.rotation.set(
                 rotation[0] + tiltX,
                 rotation[1],
@@ -113,9 +103,37 @@ function Model({ url, rotation, positionOffset, scaleMultiplier = 1 }: {
 // Single canvas with both models
 export default function HeroModels() {
     const modelUrl = "/models/textured_model.glb";
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [isVisible, setIsVisible] = useState(true);
+    const [isReady, setIsReady] = useState(false);
+
+    // View-based rendering optimization
+    useEffect(() => {
+        if (!containerRef.current) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setIsVisible(entry.isIntersecting);
+            },
+            { threshold: 0.1 }
+        );
+
+        observer.observe(containerRef.current);
+        return () => observer.disconnect();
+    }, []);
+
+    // Fade in effect: set ready after a small delay to mask initial heavy initialization
+    useEffect(() => {
+        const timer = setTimeout(() => setIsReady(true), 1500); // 1.5s delay for smooth transition
+        return () => clearTimeout(timer);
+    }, []);
 
     return (
-        <div
+        <motion.div
+            ref={containerRef}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isReady ? 1 : 0 }}
+            transition={{ duration: 1.5, ease: "easeInOut" }}
             style={{
                 position: "absolute",
                 inset: 0,
@@ -125,11 +143,11 @@ export default function HeroModels() {
         >
             <Canvas
                 camera={{ position: [0, 0, 8], fov: 45 }}
-                dpr={1} // Cap at 1 for performance
+                dpr={[1, 1.5]} // Allow up to 1.5 on high DPI but cap it
                 performance={{ min: 0.5 }}
                 gl={{
                     alpha: true,
-                    antialias: true,
+                    antialias: false, // Performance boost: disable antialias
                     stencil: false,
                     depth: true,
                     powerPreference: "high-performance",
@@ -137,22 +155,16 @@ export default function HeroModels() {
                     toneMappingExposure: 1.0,
                 }}
                 style={{ background: "transparent" }}
-                frameloop="always"
+                // Demand mode when not visible to save GPU
+                frameloop={isVisible ? "always" : "never"}
             >
                 <Suspense fallback={null}>
-                    {/* Darker, moodier lighting matching the theme */}
-                    <ambientLight intensity={0.1} />
+                    <ambientLight intensity={0.15} />
 
-                    {/* Theme blue core light (softer) */}
-                    <spotLight position={[10, 5, 10]} angle={0.4} penumbra={1} intensity={6} color="#1E65A7" />
+                    {/* Consolidated lighting: use fewer but more effective lights */}
+                    <spotLight position={[10, 10, 10]} angle={0.4} penumbra={1} intensity={8} color="#1E65A7" />
+                    <pointLight position={[-10, -5, 5]} intensity={3} color="#0C1124" />
 
-                    {/* Deep navy fill light */}
-                    <pointLight position={[-8, 12, 5]} intensity={4} color="#0C1124" />
-
-                    {/* Subtle deep blue rim light */}
-                    <pointLight position={[15, -10, -5]} intensity={2} color="#001D4A" />
-
-                    {/* Left model - Slightly smaller and adjusted pose */}
                     <Model
                         url={modelUrl}
                         rotation={[0.8, 1.8, 0.5]}
@@ -160,16 +172,15 @@ export default function HeroModels() {
                         scaleMultiplier={0.8}
                     />
 
-                    {/* Right model - Rotated to match screenshot "U" highlight */}
                     <Model
                         url={modelUrl}
                         rotation={[-0.4, 5.2, -0.2]}
                         positionOffset={[7.5, -2.0, 0]}
                     />
 
-                    <Environment preset="city" resolution={256} />
+                    <Environment preset="city" resolution={128} /> {/* Lower env resolution */}
                 </Suspense>
             </Canvas>
-        </div>
+        </motion.div>
     );
 }

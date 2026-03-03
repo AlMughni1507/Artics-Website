@@ -1484,7 +1484,7 @@ function BlogSection() {
 
                     <motion.a
                         variants={{ hidden: { opacity: 0, x: 40 }, visible: { opacity: 1, x: 0, transition: { duration: 0.6 } } }}
-                        href="#blog"
+                        href="/pages/blog"
                         className="btn-primary"
                         style={{ padding: "12px 32px" }}
                     >
@@ -1512,15 +1512,23 @@ function BlogSection() {
                         onMouseEnter={(e) => e.currentTarget.style.transform = "scale(0.98)"}
                         onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
                     >
-                        {/* Image Container */}
+                        {/* Image Placeholder */}
                         <div style={{
                             width: "100%",
                             aspectRatio: "16/9",
                             position: "relative",
                             borderRadius: "16px",
-                            overflow: "hidden"
+                            overflow: "hidden",
+                            background: "linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 100%)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center"
                         }}>
-                            <Image src={ceoImage} alt="Blog Post" fill style={{ objectFit: "cover", objectPosition: "center top" }} />
+                            <div style={{ opacity: 0.1 }}>
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                                    <rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><circle cx="9" cy="9" r="2" /><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+                                </svg>
+                            </div>
                         </div>
 
                         {/* Text Content */}
@@ -1560,15 +1568,23 @@ function BlogSection() {
                         onMouseEnter={(e) => e.currentTarget.style.transform = "scale(0.98)"}
                         onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
                     >
-                        {/* Image Container */}
+                        {/* Image Placeholder */}
                         <div style={{
                             width: "100%",
                             aspectRatio: "16/9",
                             position: "relative",
                             borderRadius: "16px",
-                            overflow: "hidden"
+                            overflow: "hidden",
+                            background: "linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 100%)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center"
                         }}>
-                            <Image src={ceoImage} alt="Blog Post" fill style={{ objectFit: "cover", objectPosition: "center top" }} />
+                            <div style={{ opacity: 0.1 }}>
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                                    <rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><circle cx="9" cy="9" r="2" /><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+                                </svg>
+                            </div>
                         </div>
 
                         {/* Text Content */}
