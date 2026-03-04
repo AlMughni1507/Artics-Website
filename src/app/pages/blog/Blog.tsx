@@ -184,12 +184,12 @@ function BlogBody() {
 
     return (
         <section style={{
-            padding: "80px 5% 120px 5%",
+            padding: "120px 0",
             backgroundColor: "#0C1124",
             position: "relative",
             zIndex: 4
         }}>
-            <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+            <div style={{ maxWidth: "1380px", margin: "0 auto", padding: "0 20px" }}>
                 {/* Header Badge */}
                 <div style={{ marginBottom: "64px" }}>
                     <motion.div

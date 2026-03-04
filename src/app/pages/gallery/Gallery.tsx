@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import { useMemo, useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Pagination from "@/components/ui/Pagination";
 
@@ -19,12 +19,12 @@ function GalleryBody() {
     const totalPages = 25; // Matching the reference image
     return (
         <section style={{
-            padding: "80px 5% 120px 5%",
+            padding: "120px 0",
             backgroundColor: "#0C1124",
             position: "relative",
             zIndex: 4
         }}>
-            <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+            <div style={{ maxWidth: "1380px", margin: "0 auto", padding: "0 20px" }}>
                 {/* Header section matching the "OUR BLOG" design in the image */}
                 <div style={{ marginBottom: "64px" }}>
                     <motion.div
@@ -165,6 +165,62 @@ function GalleryFrame({ style }: { style?: React.CSSProperties }) {
 }
 
 function GalleryHeroSection() {
+    const [trail, setTrail] = useState<{ x: number; y: number; rotation: number; id: number }[]>([]);
+    const lastPos = useRef({ x: 0, y: 0 });
+    const idCounter = useRef(0);
+    const containerRef = useRef<HTMLElement>(null);
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        // Clear any existing stillness timeout
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+        const threshold = 60; // Reduced threshold for smaller cards to maintain density
+        const distance = Math.hypot(e.clientX - lastPos.current.x, e.clientY - lastPos.current.y);
+
+        if (distance > threshold) {
+            lastPos.current = { x: e.clientX, y: e.clientY };
+
+            const newImage = {
+                x: e.clientX,
+                y: e.clientY,
+                rotation: Math.random() * 24 - 12, // Slightly more rotation for larger cards
+                id: idCounter.current++
+            };
+
+            setTrail(prev => [...prev.slice(-7), newImage]);
+        }
+
+        // Start a fallback timeout to clear cards if user stops moving
+        timeoutRef.current = setTimeout(() => {
+            startClearingTrail();
+        }, 800); // 0.8 seconds of stillness
+    };
+
+    const startClearingTrail = () => {
+        const interval = setInterval(() => {
+            setTrail(prev => {
+                if (prev.length === 0) {
+                    clearInterval(interval);
+                    return prev;
+                }
+                return prev.slice(1); // Remove the oldest card
+            });
+        }, 100); // Remove one card every 100ms
+    };
+
+    const handleMouseLeave = () => {
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        startClearingTrail();
+    };
+
+    // Clean up timeout on unmount
+    useEffect(() => {
+        return () => {
+            if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        };
+    }, []);
+
     // Reusing the deterministic random background grid from Home/About
     const gridPattern = useMemo(() => {
         const size = 50;
@@ -209,6 +265,9 @@ function GalleryHeroSection() {
 
     return (
         <section
+            ref={containerRef}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
             style={{
                 position: "relative",
                 height: "80vh",
@@ -224,6 +283,66 @@ function GalleryHeroSection() {
             {gridPattern}
             <div className="spotlight-overlay" />
             <div className="spotlight-ray" />
+
+            {/* Photo Trail Cards */}
+            <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 5 }}>
+                <AnimatePresence>
+                    {trail.map((img) => (
+                        <motion.div
+                            key={img.id}
+                            initial={{ opacity: 0, scale: 0.8, x: img.x - 60, y: img.y - 75, rotate: img.rotation - 10 }}
+                            animate={{ opacity: 1, scale: 1, x: img.x - 60, y: img.y - 75, rotate: img.rotation }}
+                            exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.2 } }}
+                            style={{
+                                position: "absolute",
+                                width: "120px",
+                                height: "150px",
+                                backgroundColor: "#FFFFFF",
+                                padding: "6px",
+                                borderRadius: "2px",
+                                boxShadow: "0 10px 20px rgba(0,0,0,0.2)",
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: "4px"
+                            }}
+                        >
+                            <div style={{
+                                flex: 1,
+                                backgroundColor: "#EEEEEE",
+                                borderRadius: "2px",
+                                overflow: "hidden",
+                                position: "relative"
+                            }}>
+                                {/* Empty photo placeholder */}
+                                <div style={{
+                                    position: "absolute",
+                                    inset: 0,
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    backgroundColor: "#FCFCFC"
+                                }}>
+                                    <div style={{
+                                        flex: 1,
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        background: "linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)"
+                                    }}>
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#CBD5E1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                            <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+                                            <circle cx="9" cy="9" r="2" />
+                                            <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+                                        </svg>
+                                    </div>
+                                    <div style={{ height: "20px", padding: "0 8px", display: "flex", alignItems: "center" }}>
+                                        <div style={{ height: "4px", width: "60%", backgroundColor: "#F1F5F9", borderRadius: "99px" }} />
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    ))}
+                </AnimatePresence>
+            </div>
 
             {/* Decorative SVGs scattered around the hero */}
             <motion.div
@@ -309,8 +428,8 @@ function GalleryHeroSection() {
                 </motion.div>
             </motion.div>
 
-            {/* Header Content */}
-            <div style={{ position: "relative", zIndex: 10, textAlign: "center", display: "flex", flexDirection: "column", gap: "24px" }}>
+            {/* Content */}
+            <div style={{ position: "relative", zIndex: 10, textAlign: "center", display: "flex", flexDirection: "column", gap: "24px", maxWidth: "900px", padding: "0 20px" }}>
                 <motion.span
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -328,7 +447,7 @@ function GalleryHeroSection() {
                 <h1 style={{
                     fontFamily: "var(--font-inter)",
                     fontWeight: 700,
-                    fontSize: "72px",
+                    fontSize: "clamp(48px, 8vw, 72px)",
                     lineHeight: 1.1,
                     color: "#EEEEEE",
                     letterSpacing: "-2px",
